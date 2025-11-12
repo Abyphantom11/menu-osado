@@ -18,7 +18,6 @@ body {
     position: relative;
     overflow: hidden;
     background-color: #000000;
-    touch-action: pan-y;
 }
 
 .page-slider {
@@ -45,9 +44,9 @@ body {
     object-fit: contain;
     user-select: none;
     -webkit-user-select: none;
-    pointer-events: auto;
     display: block;
     margin: auto;
+    touch-action: manipulation;
 }
 
 /* Indicadores y botones eliminados - Solo control por gestos */

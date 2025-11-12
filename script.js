@@ -1,7 +1,7 @@
 // Configuración
 const TOTAL_PAGES = 5; // Número total de páginas
-const SWIPE_THRESHOLD = 80; // Píxeles mínimos para cambiar de página (ALTA para baja sensibilidad)
-const SWIPE_VELOCITY_THRESHOLD = 0.5; // Velocidad mínima para cambio rápido (BAJA para menos sensibilidad)
+const SWIPE_THRESHOLD = 150; // Píxeles mínimos para cambiar de página (MUY ALTA para ultra baja sensibilidad)
+const SWIPE_VELOCITY_THRESHOLD = 0.8; // Velocidad mínima para cambio rápido (ALTA para menos sensibilidad)
 
 let currentPage = 0;
 let startX = 0;
@@ -61,8 +61,18 @@ function handleStart(e) {
     // Prevenir si es zoom (dos dedos)
     if (e.touches && e.touches.length > 1) return;
     
+    // Solo detectar swipes que empiecen desde los bordes laterales (primeros/últimos 15% de la pantalla)
+    const startPos = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+    const screenWidth = window.innerWidth;
+    const edgeThreshold = screenWidth * 0.15; // 15% del ancho de pantalla
+    
+    // Solo activar si empieza desde los bordes
+    if (startPos > edgeThreshold && startPos < (screenWidth - edgeThreshold)) {
+        return; // No hacer nada si empieza desde el centro
+    }
+    
     isDragging = true;
-    startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+    startX = startPos;
     currentX = startX;
     startTime = Date.now();
     

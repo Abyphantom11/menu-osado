@@ -10,6 +10,8 @@ body {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
+    position: fixed;
+    -webkit-overflow-scrolling: touch;
 }
 
 .menu-container {
@@ -24,7 +26,11 @@ body {
     display: flex;
     height: 100%;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
+    -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .page {
@@ -42,11 +48,13 @@ body {
     width: auto;
     height: auto;
     object-fit: contain;
+    -o-object-fit: contain;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-touch-callout: none;
     display: block;
     margin: auto;
-    touch-action: manipulation;
+    -webkit-user-drag: none;
 }
 
 /* Indicadores y botones eliminados - Solo control por gestos */

@@ -178,6 +178,11 @@ document.addEventListener('mouseup', handleEnd);
 // Prevenir el arrastre de imágenes
 slider.addEventListener('dragstart', (e) => e.preventDefault());
 
+// Prevenir comportamiento de iOS Safari
+document.addEventListener('gesturestart', (e) => e.preventDefault());
+document.addEventListener('gesturechange', (e) => e.preventDefault());
+document.addEventListener('gestureend', (e) => e.preventDefault());
+
 // Inicializar
 loadPages();
 

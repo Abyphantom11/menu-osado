@@ -60,8 +60,13 @@ function goToPage(pageIndex) {
 
 // Detectar inicio del arrastre
 function handleStart(e) {
-    // Prevenir si es zoom (dos dedos)
+    // Prevenir si es zoom (dos dedos) o si el usuario está haciendo zoom ya
     if (e.touches && e.touches.length > 1) return;
+    
+    // En iOS, verificar si hay zoom activo
+    if (window.visualViewport && window.visualViewport.scale > 1) {
+        return; // No interceptar si hay zoom activo
+    }
     
     isDragging = true;
     isHorizontalSwipe = false;
@@ -171,17 +176,23 @@ slider.addEventListener('touchstart', handleStart, { passive: true });
 slider.addEventListener('touchmove', handleMove, { passive: false });
 slider.addEventListener('touchend', handleEnd, { passive: true });
 
-slider.addEventListener('mousedown', handleStart);
-document.addEventListener('mousemove', handleMove);
-document.addEventListener('mouseup', handleEnd);
+// No agregar mouse events en dispositivos touch para evitar conflictos
+if (!('ontouchstart' in window)) {
+    slider.addEventListener('mousedown', handleStart);
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
+}
 
 // Prevenir el arrastre de imágenes
 slider.addEventListener('dragstart', (e) => e.preventDefault());
 
-// Prevenir comportamiento de iOS Safari
-document.addEventListener('gesturestart', (e) => e.preventDefault());
-document.addEventListener('gesturechange', (e) => e.preventDefault());
-document.addEventListener('gestureend', (e) => e.preventDefault());
+// Prevenir comportamiento de iOS Safari solo para gestos, no para zoom
+document.addEventListener('gesturestart', (e) => {
+    if (e.scale !== 1) { // Si es zoom, permitirlo
+        return;
+    }
+    e.preventDefault();
+});
 
 // Inicializar
 loadPages();
